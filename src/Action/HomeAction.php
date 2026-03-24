@@ -1,11 +1,11 @@
 <?php
 
-namespace Project\Name\Action;
+namespace Foxxything\CDN\Action;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
-use Project\Name\Core\Math;
+use Foxxything\CDN\Core\Math;
 
 final readonly class HomeAction
 {

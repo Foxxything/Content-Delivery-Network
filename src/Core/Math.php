@@ -1,6 +1,6 @@
 <?php
 
-namespace Project\Name\Core;
+namespace Foxxything\CDN\Core;
 
 /**
  * Math

@@ -1,6 +1,6 @@
 <?php
 
-namespace Project\Name\Middleware;
+namespace Foxxything\CDN\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

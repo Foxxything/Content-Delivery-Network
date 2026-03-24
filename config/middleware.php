@@ -1,7 +1,7 @@
 <?php
 
 use Slim\App;
-use Project\Name\Middleware\BeforeMiddleware;
+use Foxxything\CDN\Middleware\BeforeMiddleware;
 
 return function (App $app) {
     // Parse json, form data and xml
