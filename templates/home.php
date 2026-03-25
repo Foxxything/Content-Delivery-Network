@@ -1,6 +1,5 @@
-<h1>Hello, world!</h1>
-<pre>
-  <?= $add ?> <br>
-  <?= $multiply ?> <br>
-  <?= $factorial ?>
-</pre>
+<?php if ($isLoggedIn): ?>
+    <script>window.location = '/upload';</script>
+<?php else: ?>
+    <!-- your login page content -->
+<?php endif; ?>

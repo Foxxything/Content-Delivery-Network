@@ -16,6 +16,10 @@ final class BeforeMiddleware implements MiddlewareInterface
 
     public function process(Request $request, RequestHandler $handler): Response
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // Get client IP address and user agent
         $ip = $request->getServerParams()['REMOTE_ADDR'] ?? 'unknown';
         $ua = $request->getServerParams()['HTTP_USER_AGENT'] ?? 'unknown';
