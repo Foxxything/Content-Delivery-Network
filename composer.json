@@ -18,7 +18,8 @@
     "vlucas/phpdotenv": "^5.6",
     "slim/psr7": "^1.7",
     "monolog/monolog": "^3.8",
-    "wohali/oauth2-discord-new": "^1.2"
+    "wohali/oauth2-discord-new": "^1.2",
+    "intervention/image": "^3.11"
   },
   "autoload": {
     "psr-4": {
@@ -29,6 +30,6 @@
     "process-timeout": 0
   },
   "scripts": {
-    "start": "php -S localhost:8080 -t public/"
+    "start": "php -S localhost:8080 -t public router.php"
   }
 }

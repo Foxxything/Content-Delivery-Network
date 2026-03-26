@@ -9,7 +9,7 @@
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark px-4">
-    <span class="navbar-brand fw-bold">foxxything CDN</span>
+    <span class="navbar-brand fw-bold">Foxxything CDN</span>
     <span class="text-white"><?= htmlspecialchars($user['username']) ?></span>
 </nav>
 
@@ -17,11 +17,16 @@
     <div class="card shadow-sm">
         <div class="card-body text-center p-5">
             <div class="mb-3 fs-1">⚠️</div>
-            <h5 class="card-title">File already exists</h5>
-            <p class="text-muted">
-                <strong><?= htmlspecialchars($filename) ?></strong> already exists in your uploads.
-                Do you want to overwrite it?
-            </p>
+            <h5 class="card-title">
+                <?= count($filenames) === 1 ? 'File already exists' : count($filenames) . ' files already exist' ?>
+            </h5>
+            <p class="text-muted">The following file<?= count($filenames) > 1 ? 's' : '' ?> already exist in your uploads:</p>
+            <ul class="list-group mb-4 text-start">
+                <?php foreach ($filenames as $name): ?>
+                    <li class="list-group-item"><?= htmlspecialchars($name) ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <p class="text-muted">Do you want to overwrite <?= count($filenames) === 1 ? 'it' : 'them' ?>?</p>
             <form action="/upload" method="POST" class="d-flex gap-2 justify-content-center mt-4">
                 <input type="hidden" name="confirm_overwrite" value="yes">
                 <button type="submit" class="btn btn-danger">Overwrite</button>

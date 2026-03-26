@@ -30,8 +30,8 @@ final readonly class UploadAction
 
     private function getUploads(): array
     {
-        $userId  = $_SESSION['user']['id'];
-        $dir     = __DIR__ . '/../../public/uploads/' . $userId;
+        $userId = $_SESSION['user']['id'];
+        $dir = __DIR__ . '/../../public/uploads/' . $userId;
         if (!is_dir($dir)) return [];
 
         $baseUrl = $_ENV['APP_BASE_URL'] ?? 'http://localhost:8080';
@@ -39,8 +39,8 @@ final readonly class UploadAction
         return array_values(array_filter(
             array_map(fn($f) => [
                 'filename' => $f,
-                'url'      => '/uploads/' . $userId . '/' . $f,
-                'cdn'      => $baseUrl . '/uploads/' . $userId . '/' . $f,
+                'url' => $baseUrl . '/image/' . $f . '?size=256',
+                'cdn' => $baseUrl . '/image/' . $f,
             ], scandir($dir)),
             fn($f) => !empty($f['filename']) && !in_array($f['filename'], ['.', '..'])
                 && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $f['filename'])

@@ -1,6 +1,9 @@
 <?php
 
+use Foxxything\CDN\Action\ImageAction;
+use Foxxything\CDN\Action\MoveAction;
 use Foxxything\CDN\Core\DiscordAuth;
+use Foxxything\CDN\Core\ImageProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
@@ -42,6 +45,25 @@ return [
             clientSecret: $settings['clientSecret'],
             redirectUri: $settings['redirectUri'],
             scopes: ['identify'],
+        );
+    },
+
+    ImageProcessor::class => function (ContainerInterface $container) {
+        return new ImageProcessor(
+            logger: $container->get(LoggerInterface::class),
+        );
+    },
+
+    ImageAction::class => function (ContainerInterface $container) {
+        return new ImageAction(
+            imageProcessor: $container->get(ImageProcessor::class),
+            logger:         $container->get(LoggerInterface::class),
+        );
+    },
+
+    MoveAction::class => function (ContainerInterface $container) {
+        return new MoveAction(
+            logger: $container->get(LoggerInterface::class),
         );
     },
 
