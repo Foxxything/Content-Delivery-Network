@@ -11,32 +11,26 @@ use Psr\Log\LoggerInterface;
 final readonly class ImageAction
 {
     private const MIME_MAP = [
-        'png'  => 'image/png',
-        'gif'  => 'image/gif',
+        'png' => 'image/png',
+        'gif' => 'image/gif',
         'webp' => 'image/webp',
-        'jpg'  => 'image/jpeg',
+        'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
     ];
 
     public function __construct(
         private ImageProcessor  $imageProcessor,
         private LoggerInterface $logger,
-    ) {}
+    )
+    {
+    }
 
     public function __invoke(Request $request, Response $response, array $args): Response
     {
-        $userDir = PathGuard::resolveUserDir(__DIR__ . '/../../public/uploads');
-
-        if (!$userDir) {
-            $this->logger->warning('ImageAction: no user dir', [
-                'session_user' => $_SESSION['user']['id'] ?? 'none',
-            ]);
-            return $response->withStatus(empty($_SESSION['user']) ? 401 : 400);
-        }
-
-        $relativePath = $args['filename'];              // e.g. "Hosts/Foxx_Pinkerton.jpg"
-        $filename     = basename($relativePath);        // e.g. "Foxx_Pinkerton.jpg"
-        $path         = $userDir . '/' . $relativePath; // full path on disk
+        $baseDir     = __DIR__ . '/../../public/uploads';
+        $relativePath = ltrim($args['filename'], '/'); // "1322006632460451952/Wren.png"
+        $filename     = basename($relativePath);       // "Wren.png"
+        $path         = $baseDir . '/' . $relativePath;
 
         $this->logger->debug('ImageAction: request', [
             'relativePath' => $relativePath,
@@ -53,30 +47,30 @@ final readonly class ImageAction
             return $response->withStatus(404);
         }
 
-        $ext         = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $contentType = self::MIME_MAP[$ext] ?? 'application/octet-stream';
 
         $this->logger->debug('ImageAction: serving file', [
-            'filename'     => $filename,
-            'ext'          => $ext,
+            'filename' => $filename,
+            'ext' => $ext,
             'content_type' => $contentType,
-            'size_bytes'   => filesize($path),
+            'size_bytes' => filesize($path),
         ]);
 
         $params = $request->getQueryParams();
-        $size   = isset($params['size']) ? (int) $params['size'] : null;
+        $size = isset($params['size']) ? (int)$params['size'] : null;
 
         if ($size !== null) {
             $this->logger->debug('ImageAction: resize requested', [
                 'filename' => $filename,
-                'size'     => $size,
+                'size' => $size,
             ]);
 
             $data = $this->imageProcessor->resize($path, $size);
 
             if ($data === null) {
                 $this->logger->warning('ImageAction: invalid resize size', [
-                    'filename'  => $filename,
+                    'filename' => $filename,
                     'requested' => $size,
                 ]);
                 $sizes = $this->imageProcessor->getAllowedSizes();
@@ -87,8 +81,8 @@ final readonly class ImageAction
             }
 
             $this->logger->debug('ImageAction: resize successful', [
-                'filename'     => $filename,
-                'size'         => $size,
+                'filename' => $filename,
+                'size' => $size,
                 'output_bytes' => strlen($data),
             ]);
 

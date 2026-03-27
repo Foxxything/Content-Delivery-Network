@@ -39,10 +39,11 @@ final readonly class UploadAction
         return array_values(array_filter(
             array_map(fn($f) => [
                 'filename' => $f,
-                'url' => $baseUrl . '/image/' . $f . '?size=256',
-                'cdn' => $baseUrl . '/image/' . $f,
+                'url' => $baseUrl . '/image/' . $userId . '/' . $f . '?size=256',
+                'cdn' => $baseUrl . '/image/' . $userId . '/' . $f,
             ], scandir($dir)),
-            fn($f) => !empty($f['filename']) && !in_array($f['filename'], ['.', '..'])
+            fn($f) => !empty($f['filename'])
+                && !in_array($f['filename'], ['.', '..'])
                 && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $f['filename'])
         ));
     }
